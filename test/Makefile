@@ -7,7 +7,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v lfsr8.v johnson8.v SISO_latch.v
+PROJECT_SOURCES = project.v lfsr8.v johnson8.v SISO_rs.v
 # SISO_mux.v is left in the directory but not used in this implementation/tile
 
 ifneq ($(GATES),yes)
