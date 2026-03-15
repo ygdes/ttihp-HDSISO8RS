@@ -99,7 +99,7 @@ endmodule
 
 // Adds 32 latches, 16*2(*3/4) = 24 cycles, + 3DFF => 27 cycles
 // but now working as expected (yet)
-module siso_demux_mux_dl(
+module siso_demux_mux_rs(
     input  wire       RESET,
     input  wire       CLK,
     input  wire       Din,
