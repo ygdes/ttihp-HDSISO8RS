@@ -47,7 +47,8 @@ Startup sequence:
 Extra insight and observability:
 * When SHOW_LFSR=0, the IO port shows the 8 internal staggered pulses, turning from 0 to 1 and back to 0 in a linear sequence. It's just like a 4017 but 8 bits, since it's a Johnson counter too.
 * 4 output pins provide the internal state of that 4-bit Johnson counter, or ring counter, thus you should observe a pretty pattern where only one pin changes at each clock cycle.
-![](Johnson8.png)
+![](Johnson_flush.png)
+Note in the diagram above that RESET forces all the outputs to 1, thus flushing the whole delay line in less than a microsecond.
 
 * You can measure the routing latency of the pins/pads/internal wires because CLK_OUT is inverted so just tie it to EXT_CLK with pin CLK_SEL=1. Probe with an oscillocsope and voilà, you have a free-running oscillator and you can directly measure the low and high times, each corresponding to one trip on the in or out wire.
 
@@ -69,7 +70,7 @@ Note 1: 8 bits gives a period of 255, half of the SISO's depth, a small shift is
 
 Note 2: The LFSR_PERIOD pulse should appear 193 clock cycles after the release of the RESET pin.
 
-Note 3: The RESET signal does not clear the contents of the SISO. Don't forget to flush its contents before use, by waiting for a few hundreds of cycles after releasing the RESET.
+Note 3: The RESET signal clears the contents of the SISO. Give it a few cycles for the 0 to propagate through all the latches while it flushes after releasing the RESET.
 
 ![](TT_interface_LFSR8.png)
 
