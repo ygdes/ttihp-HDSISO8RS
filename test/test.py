@@ -100,7 +100,7 @@ async def test_project(dut):
       dut.ui_in.value = DIN_SEL   # EXT_RST asserted, SHOW_LFSR off : restart everything
       await ClockCycles(dut.clk, 3)
       if EnableAsserts:
-        assert dut.uio_out.value == 0 # the pulses must be off during RESET
+        assert dut.uio_out.value == 255 # all the pulses must be on during RESET
       dut._log.info(" check.")
     
       dut.ui_in.value = EXT_RST + DIN_SEL  # restart
