@@ -136,7 +136,45 @@ module tt_um_ygdes_hdsiso8_rs (
     .Dout(D_OUT));
 */
 
-// version : direct loopback, 23+24+96 = 143 cycles
+// version : 23+24 = 47 cycles
+  wire [3:0]  latch4_even, latch4_odd,
+    siso_start_even, siso_start_even_N, siso_start_odd, siso_start_odd_N,
+    siso_end_even,   siso_end_even_N,   siso_end_odd,   siso_end_odd_N;
+
+  siso_demux_mux_rs demux_mux(
+    .RESET(INT_RESET),
+    .CLK(CLK_OUT),
+    .Din(SISO_in),
+    .Latch8(Decoded8),
+    .Latch_even(latch4_even),
+    .Latch_odd(latch4_odd),
+    .siso_first_even(siso_start_even),
+    .siso_first_odd(siso_start_odd),
+    .siso_last_even(siso_start_even),
+    .siso_last_odd(siso_start_odd),
+    .siso_first_even_N(siso_end_even_N),
+    .siso_first_odd_N(siso_end_odd_N),
+    .siso_last_even_N(siso_end_even_N),
+    .siso_last_odd_N(siso_end_odd_N),
+    .Dout(D_OUT));
+
+// plugging 16*2 latches, or 24 bits
+  siso_tranche4x4_rs_pos siso16_1(
+    .siso_in(siso_start_even),
+    .siso_in_N(siso_start_even_N),
+    .siso_out(siso_end_even),
+    .siso_out_N(siso_end_even_N),
+    .latch(latch4_even));
+  siso_tranche4x4_rs_pos siso16_2(
+    .siso_in(siso_start_odd),
+    .siso_in_N(siso_start_odd_N),
+    .siso_out(siso_end_odd),
+    .siso_out_N(siso_end_odd_N),
+    .latch(latch4_odd));
+
+/*
+
+// version : 23+24+96 = 143 cycles
   wire [3:0]  latch4_even, latch4_odd,
     siso_start_even, siso_start_even_N, siso_start_odd, siso_start_odd_N,
     chain_even,      chain_even_N,      chain_odd,      chain_odd_N,
@@ -186,7 +224,9 @@ module tt_um_ygdes_hdsiso8_rs (
     .siso_out(siso_end_odd),
     .siso_out_N(siso_end_odd_N),
     .latch(latch4_odd));
-  
+*/
+
+
 /*
 //longer version, 384+96+22=502 cycles,
 //    about 9 cycles in "advance" of the LFSR period pulse
