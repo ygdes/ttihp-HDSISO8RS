@@ -114,10 +114,12 @@ async def test_project(dut):
       if i >= 8:
         break
 
-    # Reset, re-enable LFSR
-    dut.ui_in.value =  LFSR_EN + SHOW_LFSR + DIN_SEL
-    await ClockCycles(dut.clk, 2)
-    dut.ui_in.value =  LFSR_EN + SHOW_LFSR + DIN_SEL + EXT_RST
-    await ClockCycles(dut.clk, 10000) # let it run for a while to see the LFSR output from the SIO
-
     dut._log.info(" Johnson8 OK !")
+
+    # Reset, re-enable LFSR
+    if (False):
+      dut.ui_in.value =  LFSR_EN + SHOW_LFSR + DIN_SEL
+      await ClockCycles(dut.clk, 2)
+      dut.ui_in.value =  LFSR_EN + SHOW_LFSR + DIN_SEL + EXT_RST
+      await ClockCycles(dut.clk, 10000) # let it run for a while to see the LFSR output from the SIO
+
