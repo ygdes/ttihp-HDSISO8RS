@@ -101,11 +101,17 @@ async def test_project(dut):
     if EnableAsserts:
       assert dut.uio_out.value == 0 # the pulses must be off during RESET
 
+    dut._log.info(" LFSR OK !")
+
     dut.ui_in.value = EXT_RST + DIN_SEL  # restart
     await ClockCycles(dut.clk, 1) # 2 cycles before the counter is visible (including the next wait of 1 cycle)
 
+    n=0
+
     i = 0
     while (True):  # one last ride.
+      dut._log.info("n=" + str(n))
+      n=n+1
       await ClockCycles(dut.clk, 1)
       dut._log.info("cycle " + str(i) + " = " + str(dut.uio_out.value))
       if EnableAsserts:
