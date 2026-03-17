@@ -138,9 +138,9 @@ module tt_um_ygdes_hdsiso8_rs (
 
   wire [3:0]  latch4_even, latch4_odd,
     siso_start_even, siso_start_even_N, siso_start_odd, siso_start_odd_N,
-    chain_even,      chain_even_N,      chain_odd,      chain_odd_N,
-//    chain1_even,     chain1_even_N,     chain1_odd,     chain1_odd_N,
-//    chain2_even,     chain2_even_N,     chain2_odd,     chain2_odd_N,
+//    chain_even,      chain_even_N,      chain_odd,      chain_odd_N,
+    chain1_even,     chain1_even_N,     chain1_odd,     chain1_odd_N,
+    chain2_even,     chain2_even_N,     chain2_odd,     chain2_odd_N,
 //    chain3_even,     chain3_even_N,     chain3_odd,     chain3_odd_N,
     siso_end_even,   siso_end_even_N,   siso_end_odd,   siso_end_odd_N;
 
