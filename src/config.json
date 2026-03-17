@@ -17,7 +17,7 @@
 
   "//": "CLOCK_PERIOD - Increase this in case you are getting setup time violations.",
   "//": "The value is in nanoseconds, so 20ns == 50MHz.",
-  "CLOCK_PERIOD": 12,
+  "CLOCK_PERIOD": 20,
 
   "//": "value from 0 to 4, default is 0",
   "//": "(seeking documnetation... but we can try)",
