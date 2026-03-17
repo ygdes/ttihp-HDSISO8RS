@@ -102,9 +102,10 @@ module siso_demux_mux_rs(
     input  wire       RESET,
     input  wire       CLK,
     input  wire       Din,
-    input  wire [7:0] Latch8,
-    output wire [3:0] Latch_even,
+    input  wire [7:0] Latch8, // From the Johnson counter
+    output wire [3:0] Latch_even, // Same signals as above but reshuffled
     output wire [3:0] Latch_odd,
+    // The complementary outputs, going to the chain
     output wire [3:0] siso_first_even,
     output wire [3:0] siso_first_even_N,
     output wire [3:0] siso_first_odd,
@@ -240,47 +241,36 @@ module siso_tranche4x4x4_rs_neg (
 endmodule
 
 
-/*
-
 //.................................................................................
 
-// area: 4×(536.4 + 10.9) = 2189.2
-// 64 latches hold 48 bits
-module siso_tranche4x4x4_dl_pos ( // Pulse high to latch
-    input  wire [3:0] siso_in,    // 4 staggered data inputs
-    output wire [3:0] siso_out,   // 4 staggered data outputs
-    input  wire [3:0] latch       // pass/keep signals
-);
-
-  wire [3:0] t1, t2, t3, p;
-  Inverters_x4 Amp(.Y(p), .A(latch));
-  siso_tranche4x4_dl_neg tranche0(.siso_in(siso_in), .siso_out(t1),       .latch(p));
-  siso_tranche4x4_dl_neg tranche1(.siso_in(t1),      .siso_out(t2),       .latch(p));
-  siso_tranche4x4_dl_neg tranche2(.siso_in(t2),      .siso_out(t3),       .latch(p));
-  siso_tranche4x4_dl_neg tranche3(.siso_in(t3),      .siso_out(siso_out), .latch(p));
-endmodule
-
-//.................................................................................
-
-// area: 5×43.6 + 4×2189.2 = 8974.8
+// area: 4 × (1270.08+5.4432) = 5102.1
 // 256 latches hold 192 bits
-module siso_tranche4x4x4x4_dl_pos ( // Pulse high to latch
-    input  wire [3:0] siso_in,      // 4 staggered data inputs
-    output wire [3:0] siso_out,     // 4 staggered data outputs
-    input  wire [3:0] latch         // pass/keep signals
+module siso_tranche4x4x4x4_rs_neg (
+    input  wire [3:0] siso_in,     // 4 staggered data inputs
+    input  wire [3:0] siso_in_N,   // 4 staggered data inputs (complementary)
+    output wire [3:0] siso_out,    // 4 staggered data outputs
+    output wire [3:0] siso_out_N,  // 4 staggered data outputs (complementary)
+    input  wire [3:0] latch        // pass/keep signals / Pulse high to latch
 );
-
-  wire [3:0] t1, t2, t3, q, p0, p1, p2, p3;
-  // Double inversion, but last stage is per-tranche for better distance/reach
-  Inverters_x4  Amp0(.Y(q ), .A(latch));
-  Inverters_x4  Amp1(.Y(p0), .A(q));
-  Inverters_x4  Amp2(.Y(p1), .A(q));
-  Inverters_x4  Amp3(.Y(p2), .A(q));
-  Inverters_x4  Amp4(.Y(p3), .A(q));
-
-  siso_tranche4x4x4_dl_pos tranche0(.siso_in(siso_in), .siso_out(t1),       .latch(p0));
-  siso_tranche4x4x4_dl_pos tranche1(.siso_in(t1),      .siso_out(t2),       .latch(p1));
-  siso_tranche4x4x4_dl_pos tranche2(.siso_in(t2),      .siso_out(t3),       .latch(p2));
-  siso_tranche4x4x4_dl_pos tranche3(.siso_in(t3),      .siso_out(siso_out), .latch(p3));
+  wire [3:0] t1, t2, t3, t1N, t2N, t3N, p;
+  Inverters_x4 Amp(.Y(p), .A(latch));
+  siso_tranche4x4x4_rs_neg tranche0(.siso_in(siso_in), .siso_in_N(siso_in_N), .siso_out(t1),       .siso_out_N(t1N),        .latch(p));
+  siso_tranche4x4x4_rs_neg tranche1(.siso_in(t1),      .siso_in_N(t1N),       .siso_out(t2),       .siso_out_N(t2N),        .latch(p));
+  siso_tranche4x4x4_rs_neg tranche2(.siso_in(t2),      .siso_in_N(t2N),       .siso_out(t3),       .siso_out_N(t3N),        .latch(p));
+  siso_tranche4x4x4_rs_neg tranche3(.siso_in(t3),      .siso_in_N(t3N),       .siso_out(siso_out), .siso_out_N(siso_out_N), .latch(p));
 endmodule
-*/
+
+module siso_tranche4x4x4x4_rs_pos (
+    input  wire [3:0] siso_in,     // 4 staggered data inputs
+    input  wire [3:0] siso_in_N,   // 4 staggered data inputs (complementary)
+    output wire [3:0] siso_out,    // 4 staggered data outputs
+    output wire [3:0] siso_out_N,  // 4 staggered data outputs (complementary)
+    input  wire [3:0] latch        // pass/keep signals / Pulse low to latch
+);
+  wire [3:0] t1, t2, t3, t1N, t2N, t3N, p;
+  Inverters_x4 Amp(.Y(p), .A(latch));
+  siso_tranche4x4x4_rs_pos tranche0(.siso_in(siso_in), .siso_in_N(siso_in_N), .siso_out(t1),       .siso_out_N(t1N),        .latch(p));
+  siso_tranche4x4x4_rs_pos tranche1(.siso_in(t1),      .siso_in_N(t1N),       .siso_out(t2),       .siso_out_N(t2N),        .latch(p));
+  siso_tranche4x4x4_rs_pos tranche2(.siso_in(t2),      .siso_in_N(t2N),       .siso_out(t3),       .siso_out_N(t3N),        .latch(p));
+  siso_tranche4x4x4_rs_pos tranche3(.siso_in(t3),      .siso_in_N(t3N),       .siso_out(siso_out), .siso_out_N(siso_out_N), .latch(p));
+endmodule
