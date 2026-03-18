@@ -1,6 +1,6 @@
 ## What is is
 
-This tile delays a bit's value by xxx cycles at speeds above xxxMHz (according to the synthesiser, to be tested). It is an attempt to beat storage packing density, as well as a test architecture for asynchronous shift registers, not made out of the larger DFF cells. This version packs yyy RS latches and a controller, filling zz% of the tile's surface.
+This tile delays a bit's value by 768+23=791 cycles at speeds above 20MHz (according to the synthesiser, but that's conservative). It is an attempt to beat storage packing density, as well as a test architecture for asynchronous shift registers, not made out of the larger DFF cells. This version packs 1024+32 RS latches and a controller, filling 86% of the tile's surface. This is 36% more bits than the DLHQ version, but the P&R choke and the speed drops but 10x for no acceptable reason.
 
 
 ## How it works
@@ -42,7 +42,7 @@ Startup sequence:
 * Choose CLK_SEL's value
 * Run that clock
 * Release EXT_RST (to 1, and RESET is internally clock-resynchronised so give it a couple of cycles to come into effect)
-* Input a '1' or a '0' on D_IN, and observe the value appearing on D_OUT after xxx clock cycles.
+* Input a '1' or a '0' on D_IN, and observe the value appearing on D_OUT after 791 clock cycles.
 
 Extra insight and observability:
 * When SHOW_LFSR=0, the IO port shows the 8 internal staggered pulses, turning from 0 to 1 and back to 0 in a linear sequence. It's just like a 4017 but 8 bits, since it's a Johnson counter too.
@@ -66,7 +66,7 @@ An 8-bit LFSR is integrated to ease testing. Thus an oscilloscope and a variable
 * See if both traces match (add some delay on LFSR_BIT if necessary).
 * Send me pictures of your scope traces!
 
-Note 1: 8 bits gives a period of 255, half of the SISO's depth, a small shift is expected and the SISO should store twice the whole cycle, but the output should align anyway.
+Note 1: 8 bits gives a period of 255, third of the SISO's depth, a shift of 26 cycles is expected and the SISO should store 3× the whole cycle, but the output should align anyway.
 
 Note 2: The LFSR_PERIOD pulse should appear 193 clock cycles after the release of the RESET pin.
 
