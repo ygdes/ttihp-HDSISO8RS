@@ -241,10 +241,58 @@ module siso_tranche4x4x4_rs_neg (
 endmodule
 
 
+
 //.................................................................................
 
 // area: 4 × (1270.08+5.4432) = 5102.1
 // 256 latches hold 192 bits
+
+module siso_tranche4x4x4x4_rs_pos(
+  input  wire [3:0] siso_start,
+  input  wire [3:0] siso_start_N,
+  output wire [3:0] siso_end,
+  output wire [3:0] siso_end_N,
+  input  wire [3:0] latch4
+);
+  wire [3:0]    latch4_N,
+    chain1,     chain1_N,
+    chain2,     chain2_N,
+    chain3,     chain3_N;
+
+  Inverters_x4 Amp(.Y(latch4_N), .A(latch4));
+
+  siso_tranche4x4x4_rs_neg siso64_1(
+    .siso_in   (siso_start),
+    .siso_in_N (siso_start_N),
+    .siso_out  (chain1),
+    .siso_out_N(chain1_N),
+    .latch(latch4_N));
+
+  siso_tranche4x4x4_rs_neg siso64_2(
+    .siso_in   (chain1),
+    .siso_in_N (chain1_N),
+    .siso_out  (chain2),
+    .siso_out_N(chain2_N),
+    .latch(latch4_N));
+
+  siso_tranche4x4x4_rs_neg siso64_3(
+    .siso_in   (chain2),
+    .siso_in_N (chain2_N),
+    .siso_out  (chain3),
+    .siso_out_N(chain3_N),
+    .latch(latch4_N));
+    
+  siso_tranche4x4x4_rs_neg siso64_4(
+    .siso_in   (chain3),
+    .siso_in_N (chain3_N),
+    .siso_out  (siso_end),
+    .siso_out_N(siso_end_N),
+    .latch(latch4_N));
+endmodule
+
+
+/*
+No idea why these fail...
 module siso_tranche4x4x4x4_rs_neg (
     input  wire [3:0] siso_in,     // 4 staggered data inputs
     input  wire [3:0] siso_in_N,   // 4 staggered data inputs (complementary)
@@ -274,3 +322,4 @@ module siso_tranche4x4x4x4_rs_pos (
   siso_tranche4x4x4_rs_pos tranche2(.siso_in(t2),      .siso_in_N(t2N),       .siso_out(t3),       .siso_out_N(t3N),        .latch(p));
   siso_tranche4x4x4_rs_pos tranche3(.siso_in(t3),      .siso_in_N(t3N),       .siso_out(siso_out), .siso_out_N(siso_out_N), .latch(p));
 endmodule
+*/
