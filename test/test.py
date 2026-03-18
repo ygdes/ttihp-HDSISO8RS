@@ -96,6 +96,8 @@ async def test_project(dut):
   
     dut._log.info(" LFSR OK !")
 
+    await ClockCycles(dut.clk, 400) # let it run for a while to see the LFSR output from the SIO
+
     if True:
       dut.ui_in.value = DIN_SEL   # EXT_RST asserted, SHOW_LFSR off : restart everything
       await ClockCycles(dut.clk, 3)
