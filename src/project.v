@@ -212,7 +212,7 @@ module tt_um_ygdes_hdsiso8_rs (
     .latch4(latch4_even)
   );
 
-  SISO256pos siso256_1(
+  SISO256pos siso256_2(
     .siso_start(siso_start_odd),
     .siso_start_N(siso_start_odd_N),
     .siso_end(siso_end_odd),
