@@ -160,7 +160,7 @@ module tt_um_ygdes_hdsiso8_rs (
   // .................................................
   // 8×64: 384 cycles+23 = 407 cycles
   wire [3:0]
-    latch4_even_N,   latch4_odd_N
+    latch4_even_N,   latch4_odd_N,
     chain1_even,     chain1_even_N,     chain1_odd,     chain1_odd_N,
     chain2_even,     chain2_even_N,     chain2_odd,     chain2_odd_N,
     chain3_even,     chain3_even_N,     chain3_odd,     chain3_odd_N;
